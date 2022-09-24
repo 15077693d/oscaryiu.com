@@ -1,6 +1,6 @@
 ---
 name: Oscar Yiu
-avatar: /static/images/avatar.png
+avatar: /static/images/logo/logo_hi.png
 occupation: Software Engineer, Web3
 company: Hailstone Labs
 email: oscaryiu.lapsang@gmail.com
