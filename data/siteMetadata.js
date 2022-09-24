@@ -12,6 +12,7 @@ const siteMetadata = {
   socialBanner: '/static/images/twitter-card.png',
   email: 'oscaryiu.lapsang@gmail.com',
   github: 'https://github.com/15077693d',
+  instagram: 'https://www.instagram.com/0scaryiu/',
   twitter: '',
   facebook: '',
   whatsapp: '85268486545',

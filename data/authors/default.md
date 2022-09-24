@@ -7,6 +7,7 @@ email: oscaryiu.lapsang@gmail.com
 linkedin: https://www.linkedin.com/in/15077693d/
 github: https://github.com/15077693d
 youtube: https://www.youtube.com/channel/UCHEJ95BY3hPqxHjbLrlKcTw
+instagram: https://www.instagram.com/0scaryiu/
 whatsapp: 85268486545
 ---
 

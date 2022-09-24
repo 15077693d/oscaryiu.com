@@ -15,6 +15,7 @@ export default function AuthorLayout({ children, frontMatter }) {
     whatsapp,
     facebook,
     twitter,
+    instagram,
   } = frontMatter
   return (
     <>
@@ -45,6 +46,7 @@ export default function AuthorLayout({ children, frontMatter }) {
               <SocialIcon kind="facebook" href={facebook} />
               <SocialIcon kind="youtube" href={youtube} />
               <SocialIcon kind="twitter" href={twitter} />
+              <SocialIcon kind="instagram" href={instagram} />
             </div>
           </div>
           <div className="prose max-w-none pt-8 pb-8 dark:prose-dark xl:col-span-2">{children}</div>
