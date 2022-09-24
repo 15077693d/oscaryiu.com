@@ -14,6 +14,7 @@ const siteMetadata = {
   github: 'https://github.com/15077693d',
   twitter: '',
   facebook: '',
+  whatsapp: '85268486545',
   youtube: 'https://www.youtube.com/channel/UCHEJ95BY3hPqxHjbLrlKcTw',
   linkedin: 'https://www.linkedin.com/in/15077693d/',
   locale: 'en-US',

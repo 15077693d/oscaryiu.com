@@ -3,8 +3,19 @@ import Image from '@/components/Image'
 import { PageSEO } from '@/components/SEO'
 
 export default function AuthorLayout({ children, frontMatter }) {
-  const { name, avatar, occupation, company, email, twitter, linkedin, github } = frontMatter
-
+  const {
+    name,
+    avatar,
+    occupation,
+    company,
+    email,
+    linkedin,
+    github,
+    youtube,
+    whatsapp,
+    facebook,
+    twitter,
+  } = frontMatter
   return (
     <>
       <PageSEO title={`About - ${name}`} description={`About me - ${name}`} />
@@ -29,7 +40,10 @@ export default function AuthorLayout({ children, frontMatter }) {
             <div className="flex space-x-3 pt-6">
               <SocialIcon kind="mail" href={`mailto:${email}`} />
               <SocialIcon kind="github" href={github} />
+              <SocialIcon kind="whatsapp" href={`https://wa.me/${whatsapp}`} />
               <SocialIcon kind="linkedin" href={linkedin} />
+              <SocialIcon kind="facebook" href={facebook} />
+              <SocialIcon kind="youtube" href={youtube} />
               <SocialIcon kind="twitter" href={twitter} />
             </div>
           </div>

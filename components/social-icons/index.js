@@ -4,6 +4,7 @@ import Facebook from './facebook.svg'
 import Youtube from './youtube.svg'
 import Linkedin from './linkedin.svg'
 import Twitter from './twitter.svg'
+import Whatsapp from './Whatsapp.svg'
 
 // Icons taken from: https://simpleicons.org/
 
@@ -14,6 +15,7 @@ const components = {
   youtube: Youtube,
   linkedin: Linkedin,
   twitter: Twitter,
+  whatsapp: Whatsapp,
 }
 
 const SocialIcon = ({ kind, href, size = 8 }) => {
@@ -21,7 +23,7 @@ const SocialIcon = ({ kind, href, size = 8 }) => {
     return null
 
   const SocialSvg = components[kind]
-
+  console.log(kind, href)
   return (
     <a
       className="text-sm text-gray-500 transition hover:text-gray-600"
