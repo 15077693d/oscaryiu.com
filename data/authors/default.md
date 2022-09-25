@@ -15,6 +15,6 @@ I am an web3 engineer 💻 at the Hailstone Labs. My tech interests includes fro
 
 I am responsibe for maintaining and developing new features in Platypus Finance dapp web interface. It is an innovative AMM stableswap platform with top10 TVL in Avalanche blockchain.
 
-Apart from coding, My habbits are playing ⚽ football and playing 🎷 saxophone. I love the jazz fusion band called T-Square!!!!! takarajima is one of my favorite songs in their alburm.
+Apart from coding, My habbits are playing ⚽ and 🎷. I love the jazz fusion band called T-Square!!!!! takarajima is one of my favorite songs in their alburm.
 
 Feel free to reach out to me if you have any questions or comments. 🎉
