@@ -9,7 +9,7 @@ const siteMetadata = {
   siteRepo: 'https://github.com/15077693d/oscaryiu.com',
   siteLogo: '/static/images/logo/logo.png',
   image: '/static/images/avatar.png',
-  socialBanner: '/static/images/twitter-card.png',
+  socialBanner: '/static/images/socialBanner.png',
   email: 'oscaryiu.lapsang@gmail.com',
   github: 'https://github.com/15077693d',
   instagram: 'https://www.instagram.com/0scaryiu/',
