@@ -4,7 +4,7 @@ const siteMetadata = {
   headerTitle: 'Oscar Yiu',
   description: 'A blog to capture my daily life and share ideas.',
   language: 'en-us',
-  theme: 'system', // system, dark or light
+  theme: 'dark', // system, dark or light
   siteUrl: 'https://oscaryiu.com',
   siteRepo: 'https://github.com/15077693d/oscaryiu.com',
   siteLogo: '/static/images/logo/logo.png',
