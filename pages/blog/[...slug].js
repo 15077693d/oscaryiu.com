@@ -3,6 +3,7 @@ import PageTitle from '@/components/PageTitle'
 import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
+import { useEffect } from 'react'
 
 const DEFAULT_LAYOUT = 'PostLayout'
 
@@ -42,7 +43,23 @@ export async function getStaticProps({ params }) {
 
 export default function Blog({ post, authorDetails, prev, next }) {
   const { mdxSource, toc, frontMatter } = post
-
+  useEffect(() => {
+    // incrementViewCount when Blog rerender
+    const incrementViewCount = async () => {
+      if (frontMatter.slug) {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URI}/api/blogsViewCount`, {
+          method: 'POST',
+          body: JSON.stringify({ slug: frontMatter.slug }),
+          // Without context type the data which is string instead of json object
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        console.log(await res.json())
+      }
+    }
+    incrementViewCount()
+  }, [frontMatter.slug])
   return (
     <>
       {frontMatter.draft !== true ? (

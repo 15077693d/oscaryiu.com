@@ -4,18 +4,26 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
-
+import ViewCountIcon from '@/components/icons/view-count.svg'
 import NewsletterForm from '@/components/NewsletterForm'
+import Image from 'next/image'
 
 const MAX_DISPLAY = 5
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
-
-  return { props: { posts } }
+  // Add API_BASE_URI in Secret Keys
+  let viewCounts
+  if (process.env.NEXT_PUBLIC_API_BASE_URI) {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URI}/api/blogsViewCount`)
+    viewCounts = await res.json()
+  } else {
+    viewCounts = {}
+  }
+  return { props: { posts, viewCounts } }
 }
 
-export default function Home({ posts }) {
+export default function Home({ posts, viewCounts }) {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
@@ -40,6 +48,14 @@ export default function Home({ posts }) {
                       <dt className="sr-only">Published on</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                         <time dateTime={date}>{formatDate(date)}</time>
+                        <span>
+                          &nbsp;-{' '}
+                          <ViewCountIcon
+                            viewBox="0 0 48 48"
+                            className="inline h-[20px] w-[20px] fill-gray-500 dark:fill-gray-400"
+                          />{' '}
+                          {viewCounts[slug] || 0}
+                        </span>
                       </dd>
                     </dl>
                     <div className="space-y-5 xl:col-span-3">
