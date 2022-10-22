@@ -1,5 +1,8 @@
 // incrementViewCount when Blog rerender
 export const incrementBlogViewCount = async (slug) => {
+  if (!process.env.NEXT_PUBLIC_API_BASE_URI) {
+    console.error('Missing process.env.NEXT_PUBLIC_API_BASE_URI')
+  }
   if (slug) {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URI}/api/blogsViewCount`, {
       method: 'POST',
@@ -13,6 +16,9 @@ export const incrementBlogViewCount = async (slug) => {
 }
 
 export const getBlogsViewCount = async (slug) => {
+  if (!process.env.NEXT_PUBLIC_API_BASE_URI) {
+    console.error('Missing process.env.NEXT_PUBLIC_API_BASE_URI')
+  }
   // Add API_BASE_URI in Secret Keys
   let viewCountsOrViewCount
   try {
