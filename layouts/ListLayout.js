@@ -4,8 +4,15 @@ import siteMetadata from '@/data/siteMetadata'
 import { useState } from 'react'
 import Pagination from '@/components/Pagination'
 import formatDate from '@/lib/utils/formatDate'
+import ViewCount from '@/components/icons/ViewCount'
 
-export default function ListLayout({ posts, title, initialDisplayPosts = [], pagination }) {
+export default function ListLayout({
+  posts,
+  title,
+  initialDisplayPosts = [],
+  pagination,
+  blogsViewCount,
+}) {
   const [searchValue, setSearchValue] = useState('')
   const filteredBlogPosts = posts.filter((frontMatter) => {
     const searchContent = frontMatter.title + frontMatter.summary + frontMatter.tags.join(' ')
@@ -58,6 +65,7 @@ export default function ListLayout({ posts, title, initialDisplayPosts = [], pag
                     <dt className="sr-only">Published on</dt>
                     <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                       <time dateTime={date}>{formatDate(date)}</time>
+                      <ViewCount viewCount={blogsViewCount ? blogsViewCount[slug] : '0' || '0'} />
                     </dd>
                   </dl>
                   <div className="space-y-3 xl:col-span-3">

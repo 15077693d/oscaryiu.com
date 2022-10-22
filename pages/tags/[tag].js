@@ -7,6 +7,7 @@ import { getAllTags } from '@/lib/tags'
 import kebabCase from '@/lib/utils/kebabCase'
 import fs from 'fs'
 import path from 'path'
+import { getBlogsViewCount } from '@/utils/fetch'
 
 const root = process.cwd()
 
@@ -28,6 +29,7 @@ export async function getStaticProps({ params }) {
   const filteredPosts = allPosts.filter(
     (post) => post.draft !== true && post.tags.map((t) => kebabCase(t)).includes(params.tag)
   )
+  const blogsViewCount = await getBlogsViewCount()
 
   // rss
   if (filteredPosts.length > 0) {
@@ -37,10 +39,10 @@ export async function getStaticProps({ params }) {
     fs.writeFileSync(path.join(rssPath, 'feed.xml'), rss)
   }
 
-  return { props: { posts: filteredPosts, tag: params.tag } }
+  return { props: { posts: filteredPosts, tag: params.tag, blogsViewCount } }
 }
 
-export default function Tag({ posts, tag }) {
+export default function Tag({ posts, tag, blogsViewCount }) {
   // Capitalize first letter and convert space to dash
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   return (
@@ -49,7 +51,7 @@ export default function Tag({ posts, tag }) {
         title={`${tag} - ${siteMetadata.author}`}
         description={`${tag} tags - ${siteMetadata.author}`}
       />
-      <ListLayout posts={posts} title={title} />
+      <ListLayout blogsViewCount={blogsViewCount} posts={posts} title={title} />
     </>
   )
 }

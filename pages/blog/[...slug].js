@@ -4,7 +4,7 @@ import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
 import { useEffect } from 'react'
-
+import { incrementBlogViewCount, getBlogsViewCount } from '@/utils/fetch'
 const DEFAULT_LAYOUT = 'PostLayout'
 
 export async function getStaticPaths() {
@@ -26,6 +26,8 @@ export async function getStaticProps({ params }) {
   const next = allPosts[postIndex - 1] || null
   const post = await getFileBySlug('blog', params.slug.join('/'))
   const authorList = post.frontMatter.authors || ['default']
+  const slug = params.slug[0]
+  const blogViewCount = await getBlogsViewCount(slug)
   const authorPromise = authorList.map(async (author) => {
     const authorResults = await getFileBySlug('authors', [author])
     return authorResults.frontMatter
@@ -38,27 +40,13 @@ export async function getStaticProps({ params }) {
     fs.writeFileSync('./public/feed.xml', rss)
   }
 
-  return { props: { post, authorDetails, prev, next } }
+  return { props: { post, authorDetails, prev, next, blogViewCount } }
 }
 
-export default function Blog({ post, authorDetails, prev, next }) {
+export default function Blog({ post, authorDetails, prev, next, blogViewCount }) {
   const { mdxSource, toc, frontMatter } = post
   useEffect(() => {
-    // incrementViewCount when Blog rerender
-    const incrementViewCount = async () => {
-      if (frontMatter.slug) {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URI}/api/blogsViewCount`, {
-          method: 'POST',
-          body: JSON.stringify({ slug: frontMatter.slug }),
-          // Without context type the data which is string instead of json object
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        })
-        console.log(await res.json())
-      }
-    }
-    incrementViewCount()
+    incrementBlogViewCount(frontMatter.slug)
   }, [frontMatter.slug])
   return (
     <>
@@ -71,6 +59,7 @@ export default function Blog({ post, authorDetails, prev, next }) {
           authorDetails={authorDetails}
           prev={prev}
           next={next}
+          blogViewCount={blogViewCount}
         />
       ) : (
         <div className="mt-24 text-center">

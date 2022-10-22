@@ -43,11 +43,15 @@ export default async function BlogViewCountApi(req, res) {
           )
           .toArray()
         client.close()
-        res.json(
-          countData.reduce((prev, curr) => {
-            return { ...prev, [curr.slug]: curr.viewCount }
-          }, {})
-        )
+        if (req.query.slug) {
+          res.json(countData[0].viewCount)
+        } else {
+          res.json(
+            countData.reduce((prev, curr) => {
+              return { ...prev, [curr.slug]: curr.viewCount }
+            }, {})
+          )
+        }
         break
     }
   } catch (e) {

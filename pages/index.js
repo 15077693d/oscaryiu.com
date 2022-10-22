@@ -4,26 +4,18 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
-import ViewCountIcon from '@/components/icons/view-count.svg'
 import NewsletterForm from '@/components/NewsletterForm'
-import Image from 'next/image'
-
+import ViewCount from '@/components/icons/ViewCount'
+import { getBlogsViewCount } from '@/utils/fetch'
 const MAX_DISPLAY = 5
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
-  // Add API_BASE_URI in Secret Keys
-  let viewCounts
-  if (process.env.NEXT_PUBLIC_API_BASE_URI) {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URI}/api/blogsViewCount`)
-    viewCounts = await res.json()
-  } else {
-    viewCounts = {}
-  }
-  return { props: { posts, viewCounts } }
+  const blogsViewCount = await getBlogsViewCount()
+  return { props: { posts, blogsViewCount } }
 }
 
-export default function Home({ posts, viewCounts }) {
+export default function Home({ posts, blogsViewCount }) {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
@@ -48,14 +40,7 @@ export default function Home({ posts, viewCounts }) {
                       <dt className="sr-only">Published on</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                         <time dateTime={date}>{formatDate(date)}</time>
-                        <span>
-                          &nbsp;-{' '}
-                          <ViewCountIcon
-                            viewBox="0 0 48 48"
-                            className="inline h-[20px] w-[20px] fill-gray-500 dark:fill-gray-400"
-                          />{' '}
-                          {viewCounts[slug] || 0}
-                        </span>
+                        <ViewCount viewCount={blogsViewCount[slug] || '0'} />
                       </dd>
                     </dl>
                     <div className="space-y-5 xl:col-span-3">
