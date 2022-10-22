@@ -11,7 +11,9 @@ const MAX_DISPLAY = 5
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
+  console.log('1')
   const blogsViewCount = await getBlogsViewCount()
+  console.log('2')
   return { props: { posts, blogsViewCount } }
 }
 
