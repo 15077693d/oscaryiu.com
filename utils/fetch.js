@@ -27,7 +27,7 @@ export const getBlogsViewCount = async (slug) => {
     )
     viewCountsOrViewCount = await res.json()
     if (slug) {
-      return viewCountsOrViewCount[slug]
+      return viewCountsOrViewCount[slug] || '0'
     }
   } catch (error) {
     viewCountsOrViewCount = slug ? '0' : {}
