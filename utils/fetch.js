@@ -26,6 +26,9 @@ export const getBlogsViewCount = async (slug) => {
       `https://oscaryiu-com-i1dy-git-feat-view-count-15077693d.vercel.app/api/blogsViewCount`
     )
     viewCountsOrViewCount = await res.json()
+    if (slug) {
+      return viewCountsOrViewCount[slug]
+    }
   } catch (error) {
     viewCountsOrViewCount = slug ? '0' : {}
   }
