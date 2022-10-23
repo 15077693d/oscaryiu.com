@@ -16,15 +16,13 @@ export const incrementBlogViewCount = async (slug) => {
 }
 
 export const getBlogsViewCount = async (slug) => {
-  // if (!process.env.NEXT_PUBLIC_API_BASE_URI) {
-  //   console.error('Missing process.env.NEXT_PUBLIC_API_BASE_URI')
-  // }
+  if (!process.env.NEXT_PUBLIC_API_BASE_URI) {
+    console.error('Missing process.env.NEXT_PUBLIC_API_BASE_URI')
+  }
   // Add API_BASE_URI in Secret Keys
   let viewCountsOrViewCount
   try {
-    const res = await fetch(
-      `https://oscaryiu-com-i1dy-git-feat-view-count-15077693d.vercel.app/api/blogsViewCount`
-    )
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URI}/api/blogsViewCount`)
     viewCountsOrViewCount = await res.json()
     if (slug) {
       return viewCountsOrViewCount[slug] || '0'
