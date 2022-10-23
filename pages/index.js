@@ -9,10 +9,10 @@ import ViewCount from '@/components/icons/ViewCount'
 import { getBlogsViewCount } from '@/utils/fetch'
 const MAX_DISPLAY = 5
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
   const blogsViewCount = await getBlogsViewCount()
-  return { props: { posts, blogsViewCount } }
+  return { props: { posts, blogsViewCount }, revalidate: 1 }
 }
 
 export default function Home({ posts, blogsViewCount }) {

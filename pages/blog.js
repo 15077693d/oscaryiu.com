@@ -15,7 +15,7 @@ export async function getStaticProps() {
   }
   const blogsViewCount = await getBlogsViewCount()
 
-  return { props: { initialDisplayPosts, posts, pagination, blogsViewCount } }
+  return { props: { initialDisplayPosts, posts, pagination, blogsViewCount }, revalidate: 1 }
 }
 
 export default function Blog({ posts, initialDisplayPosts, pagination, blogsViewCount }) {

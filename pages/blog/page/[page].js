@@ -40,6 +40,7 @@ export async function getStaticProps(context) {
       pagination,
       blogsViewCount,
     },
+    revalidate: 1,
   }
 }
 
