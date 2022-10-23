@@ -15,7 +15,7 @@ export async function getStaticPaths() {
         slug: formatSlug(p).split('/'),
       },
     })),
-    fallback: false,
+    fallback: 'blocking',
   }
 }
 
