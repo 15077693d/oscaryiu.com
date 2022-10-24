@@ -15,7 +15,7 @@ export async function getStaticPaths() {
         slug: formatSlug(p).split('/'),
       },
     })),
-    fallback: 'blocking',
+    fallback: true,
   }
 }
 
@@ -44,18 +44,23 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Blog({ post, authorDetails, prev, next, blogViewCount }) {
-  const { mdxSource, toc, frontMatter } = post
   useEffect(() => {
-    incrementBlogViewCount(frontMatter.slug)
-  }, [frontMatter.slug])
+    if (post) {
+      incrementBlogViewCount(post.frontMatter.slug)
+    }
+  }, [])
+  /** @TODO fix build bug! */
+  if (!post) {
+    return <></>
+  }
   return (
     <>
-      {frontMatter.draft !== true ? (
+      {post.frontMatter.draft !== true ? (
         <MDXLayoutRenderer
-          layout={frontMatter.layout || DEFAULT_LAYOUT}
-          toc={toc}
-          mdxSource={mdxSource}
-          frontMatter={frontMatter}
+          layout={post.frontMatter.layout || DEFAULT_LAYOUT}
+          toc={post.toc}
+          mdxSource={post.mdxSource}
+          frontMatter={post.frontMatter}
           authorDetails={authorDetails}
           prev={prev}
           next={next}

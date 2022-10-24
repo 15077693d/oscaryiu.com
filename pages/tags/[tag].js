@@ -20,7 +20,7 @@ export async function getStaticPaths() {
         tag,
       },
     })),
-    fallback: false,
+    fallback: true,
   }
 }
 
@@ -43,6 +43,11 @@ export async function getStaticProps({ params }) {
 }
 
 export default function Tag({ posts, tag, blogsViewCount }) {
+  /** @TODO fix build bug! */
+
+  if (!tag) {
+    return <></>
+  }
   // Capitalize first letter and convert space to dash
   const title = tag[0].toUpperCase() + tag.split(' ').join('-').slice(1)
   return (
