@@ -7,7 +7,7 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import Comments from '@/components/comments'
 import ScrollTopAndComment from '@/components/ScrollTopAndComment'
-
+import ViewCount from '@/components/icons/ViewCount'
 const editUrl = (fileName) => `${siteMetadata.siteRepo}/blob/master/data/blog/${fileName}`
 const discussUrl = (slug) =>
   `https://mobile.twitter.com/search?q=${encodeURIComponent(
@@ -16,7 +16,14 @@ const discussUrl = (slug) =>
 
 const postDateTemplate = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
 
-export default function PostLayout({ frontMatter, authorDetails, next, prev, children }) {
+export default function PostLayout({
+  frontMatter,
+  authorDetails,
+  next,
+  prev,
+  children,
+  blogViewCount,
+}) {
   const { slug, fileName, date, title, images, tags } = frontMatter
 
   return (
@@ -37,6 +44,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                   <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                     <time dateTime={date}>
                       {new Date(date).toLocaleDateString(siteMetadata.locale, postDateTemplate)}
+                      <ViewCount viewCount={blogViewCount} />
                     </time>
                   </dd>
                 </div>
@@ -50,7 +58,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
             className="divide-y divide-gray-200 pb-8 dark:divide-gray-700 xl:grid xl:grid-cols-4 xl:gap-x-6 xl:divide-y-0"
             style={{ gridTemplateRows: 'auto 1fr' }}
           >
-            <dl className="pt-6 pb-10 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
+            {/* <dl className="pt-6 pb-10 xl:border-b xl:border-gray-200 xl:pt-11 xl:dark:border-gray-700">
               <dt className="sr-only">Authors</dt>
               <dd>
                 <ul className="flex justify-center space-x-8 sm:space-x-12 xl:block xl:space-x-0 xl:space-y-8">
@@ -84,7 +92,7 @@ export default function PostLayout({ frontMatter, authorDetails, next, prev, chi
                   ))}
                 </ul>
               </dd>
-            </dl>
+            </dl> */}
             <div className="divide-y divide-gray-200 dark:divide-gray-700 xl:col-span-3 xl:row-span-2 xl:pb-0">
               <div className="prose max-w-none pt-10 pb-8 dark:prose-dark">{children}</div>
               <div className="pt-6 pb-6 text-sm text-gray-700 dark:text-gray-300">

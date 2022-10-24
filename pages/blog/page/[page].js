@@ -3,17 +3,16 @@ import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import ListLayout from '@/layouts/ListLayout'
 import { POSTS_PER_PAGE } from '../../blog'
-
+import { getBlogsViewCount } from '@/utils/fetch'
 export async function getStaticPaths() {
   const totalPosts = await getAllFilesFrontMatter('blog')
   const totalPages = Math.ceil(totalPosts.length / POSTS_PER_PAGE)
   const paths = Array.from({ length: totalPages }, (_, i) => ({
     params: { page: (i + 1).toString() },
   }))
-
   return {
     paths,
-    fallback: false,
+    fallback: true,
   }
 }
 
@@ -31,21 +30,28 @@ export async function getStaticProps(context) {
     currentPage: pageNumber,
     totalPages: Math.ceil(posts.length / POSTS_PER_PAGE),
   }
-
+  const blogsViewCount = await getBlogsViewCount()
   return {
     props: {
       posts,
       initialDisplayPosts,
       pagination,
+      blogsViewCount,
     },
+    revalidate: 1,
   }
 }
 
-export default function PostPage({ posts, initialDisplayPosts, pagination }) {
+export default function PostPage({ posts, initialDisplayPosts, pagination, blogsViewCount }) {
+  /** @TODO fix build bug! */
+  if (!posts) {
+    return <></>
+  }
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
       <ListLayout
+        blogsViewCount={blogsViewCount}
         posts={posts}
         initialDisplayPosts={initialDisplayPosts}
         pagination={pagination}

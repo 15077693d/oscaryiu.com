@@ -4,18 +4,18 @@ import Tag from '@/components/Tag'
 import siteMetadata from '@/data/siteMetadata'
 import { getAllFilesFrontMatter } from '@/lib/mdx'
 import formatDate from '@/lib/utils/formatDate'
-
 import NewsletterForm from '@/components/NewsletterForm'
-
+import ViewCount from '@/components/icons/ViewCount'
+import { getBlogsViewCount } from '@/utils/fetch'
 const MAX_DISPLAY = 5
 
 export async function getStaticProps() {
   const posts = await getAllFilesFrontMatter('blog')
-
-  return { props: { posts } }
+  const blogsViewCount = await getBlogsViewCount()
+  return { props: { posts, blogsViewCount }, revalidate: 1 }
 }
 
-export default function Home({ posts }) {
+export default function Home({ posts, blogsViewCount }) {
   return (
     <>
       <PageSEO title={siteMetadata.title} description={siteMetadata.description} />
@@ -40,6 +40,7 @@ export default function Home({ posts }) {
                       <dt className="sr-only">Published on</dt>
                       <dd className="text-base font-medium leading-6 text-gray-500 dark:text-gray-400">
                         <time dateTime={date}>{formatDate(date)}</time>
+                        <ViewCount viewCount={blogsViewCount[slug] || '0'} />
                       </dd>
                     </dl>
                     <div className="space-y-5 xl:col-span-3">

@@ -3,8 +3,12 @@ import PageTitle from '@/components/PageTitle'
 import generateRss from '@/lib/generate-rss'
 import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
+import { useEffect } from 'react'
+import { incrementBlogViewCount, getBlogsViewCount } from '@/utils/fetch'
+import path from 'path'
 
 const DEFAULT_LAYOUT = 'PostLayout'
+const root = process.cwd()
 
 export async function getStaticPaths() {
   const posts = getFiles('blog')
@@ -14,7 +18,7 @@ export async function getStaticPaths() {
         slug: formatSlug(p).split('/'),
       },
     })),
-    fallback: false,
+    fallback: true,
   }
 }
 
@@ -25,6 +29,8 @@ export async function getStaticProps({ params }) {
   const next = allPosts[postIndex - 1] || null
   const post = await getFileBySlug('blog', params.slug.join('/'))
   const authorList = post.frontMatter.authors || ['default']
+  const slug = params.slug[0]
+  const blogViewCount = await getBlogsViewCount(slug)
   const authorPromise = authorList.map(async (author) => {
     const authorResults = await getFileBySlug('authors', [author])
     return authorResults.frontMatter
@@ -32,28 +38,41 @@ export async function getStaticProps({ params }) {
   const authorDetails = await Promise.all(authorPromise)
 
   // rss
-  if (allPosts.length > 0) {
-    const rss = generateRss(allPosts)
-    fs.writeFileSync('./public/feed.xml', rss)
+  try {
+    if (allPosts.length > 0) {
+      const rss = generateRss(allPosts)
+      console.log('LOG getStaticProps(blog/[slug]):', path.join(root, 'public', 'feed.xml'))
+      fs.writeFileSync(path.join(root, 'public', 'feed.xml'), rss)
+    }
+  } catch (error) {
+    console.error(error)
   }
 
-  return { props: { post, authorDetails, prev, next } }
+  return { props: { post, authorDetails, prev, next, blogViewCount }, revalidate: 1 }
 }
 
-export default function Blog({ post, authorDetails, prev, next }) {
-  const { mdxSource, toc, frontMatter } = post
-
+export default function Blog({ post, authorDetails, prev, next, blogViewCount }) {
+  useEffect(() => {
+    if (post) {
+      incrementBlogViewCount(post.frontMatter.slug)
+    }
+  }, [post])
+  /** @TODO fix build bug! */
+  if (!post) {
+    return <></>
+  }
   return (
     <>
-      {frontMatter.draft !== true ? (
+      {post.frontMatter.draft !== true ? (
         <MDXLayoutRenderer
-          layout={frontMatter.layout || DEFAULT_LAYOUT}
-          toc={toc}
-          mdxSource={mdxSource}
-          frontMatter={frontMatter}
+          layout={post.frontMatter.layout || DEFAULT_LAYOUT}
+          toc={post.toc}
+          mdxSource={post.mdxSource}
+          frontMatter={post.frontMatter}
           authorDetails={authorDetails}
           prev={prev}
           next={next}
+          blogViewCount={blogViewCount}
         />
       ) : (
         <div className="mt-24 text-center">
