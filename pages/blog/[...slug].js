@@ -5,7 +5,10 @@ import { MDXLayoutRenderer } from '@/components/MDXComponents'
 import { formatSlug, getAllFilesFrontMatter, getFileBySlug, getFiles } from '@/lib/mdx'
 import { useEffect } from 'react'
 import { incrementBlogViewCount, getBlogsViewCount } from '@/utils/fetch'
+import path from 'path'
+
 const DEFAULT_LAYOUT = 'PostLayout'
+const root = process.cwd()
 
 export async function getStaticPaths() {
   const posts = getFiles('blog')
@@ -37,7 +40,7 @@ export async function getStaticProps({ params }) {
   // rss
   if (allPosts.length > 0) {
     const rss = generateRss(allPosts)
-    fs.writeFileSync('./public/feed.xml', rss)
+    fs.writeFileSync(path.join(root, 'public', 'feed.xml'), rss)
   }
 
   return { props: { post, authorDetails, prev, next, blogViewCount }, revalidate: 1 }
@@ -48,7 +51,7 @@ export default function Blog({ post, authorDetails, prev, next, blogViewCount })
     if (post) {
       incrementBlogViewCount(post.frontMatter.slug)
     }
-  }, [])
+  }, [post])
   /** @TODO fix build bug! */
   if (!post) {
     return <></>
