@@ -38,9 +38,14 @@ export async function getStaticProps({ params }) {
   const authorDetails = await Promise.all(authorPromise)
 
   // rss
-  if (allPosts.length > 0) {
-    const rss = generateRss(allPosts)
-    fs.writeFileSync(path.join(root, 'public', 'feed.xml'), rss)
+  try {
+    if (allPosts.length > 0) {
+      const rss = generateRss(allPosts)
+      console.log('LOG getStaticProps(blog/[slug]):', path.join(root, 'public', 'feed.xml'))
+      fs.writeFileSync(path.join(root, 'public', 'feed.xml'), rss)
+    }
+  } catch (error) {
+    console.error(error)
   }
 
   return { props: { post, authorDetails, prev, next, blogViewCount }, revalidate: 1 }

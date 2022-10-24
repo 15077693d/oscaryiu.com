@@ -32,11 +32,16 @@ export async function getStaticProps({ params }) {
   const blogsViewCount = await getBlogsViewCount()
 
   // rss
-  if (filteredPosts.length > 0) {
-    const rss = generateRss(filteredPosts, `tags/${params.tag}/feed.xml`)
-    const rssPath = path.join(root, 'public', 'tags', params.tag)
-    fs.mkdirSync(rssPath, { recursive: true })
-    fs.writeFileSync(path.join(rssPath, 'feed.xml'), rss)
+  try {
+    if (filteredPosts.length > 0) {
+      const rss = generateRss(filteredPosts, `tags/${params.tag}/feed.xml`)
+      const rssPath = path.join(root, 'public', 'tags', params.tag)
+      console.log('LOG getStaticProps(tags/[slug]):', path.join(rssPath, 'feed.xml'))
+      fs.mkdirSync(rssPath, { recursive: true })
+      fs.writeFileSync(path.join(rssPath, 'feed.xml'), rss)
+    }
+  } catch (error) {
+    console.error(error)
   }
 
   return { props: { posts: filteredPosts, tag: params.tag, blogsViewCount }, revalidate: 1 }
