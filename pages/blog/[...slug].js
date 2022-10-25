@@ -53,7 +53,7 @@ export async function getStaticProps({ params }) {
 
 export default function Blog({ post, authorDetails, prev, next, blogViewCount }) {
   useEffect(() => {
-    if (post) {
+    if (post && process.env.NEXT_PUBLIC_DISABLE_BLOG_POST_REQUEST !== 'true') {
       incrementBlogViewCount(post.frontMatter.slug)
     }
   }, [post])
