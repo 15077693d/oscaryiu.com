@@ -1,0 +1,48 @@
+---
+title: A Journey of View Count Feature
+date: '2022-10-24'
+tags: ['Oscaryiu.com2.0']
+draft: false
+summary: 'The view count feature is finally here. As a user, it may be an easy and tiny number to display on the page. For me, it is a beautiful journey to feel the power of Next.js and its community.'
+authors: ['default']
+---
+
+In the previous blog, I mentioned a list of wanted features on this website. My first target is the view count feature. Since I thought it was easy to do so.
+
+1. Find a cloud DB
+2. Write a post and get the API in page/API folder
+3. Add the number and view icon on the needed pages
+
+![3 steps of view count feature](/static/images/blogs/a-journey-of-view-count-feature/3-steps-of-view-count-feature.png)
+
+<div class="text-neutral-500 w-[100%] text-center">3 steps of view count feature</div>
+
+The first step and second steps are OK. I did some research to compare different DB cloud services such as Firebase, Supabase, and MongoDB. I chose MongoDB Atlas because it's free with 512 MB and 100 curd requests in a second at max. MongoDB Atlas fulfills this tiny mission. Otherwise, it will be a happy problem to solve. Apart from the cost perspective, I used it in my previous work and am familiar with the SDK compared to Firebase and Supabase.
+
+Step two, I made a demo in codesandbox. I love the secret keys feature in the server control panel so I can access the database without explicit sensitive information. I add API_BASE_URI as an environment variable. I can access this variable in build time, but I cannot fire the post request on the client side. After a long fight with a google search, I realize I know nothing about Next.js. I'm so stupid that I forgot the difference between the client-side and server-side environment variables. I renamed it to NEXT_PUBLIC_API_BASE_URI then everything works now...
+
+<iframe
+  src="https://codesandbox.io/embed/next-js-view-count-with-mongodb-fh438d?autoresize=1&fontsize=14&theme=dark"
+  style={{ width: '100%', height: '500px', border: '0', borderRadius: '4px', overflow: 'hidden' }}
+  title="Next.js - View count with Mongodb"
+  allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+  sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>
+
+<div class="text-neutral-500 w-[100%] text-center">View count Demo on Codesandbox</div>
+
+The last step drives me crazy since I mess up static site generation (SSG) in development. In the codesandbox demo, I used server-side rerendering (SSR) to handle the view count feature. Once the client requests /blog, the server will build this page and send it to the client. Compared to SSG, It will slow down my website when the user routes to different pages with view count included. Therefore, I give up this approach. I tried to add the view count fetching logic inside the getStaticProps function. Then, I executed yarn dev and saw the experience perfectly well. Surprisingly, the view count will increment when I go to the index page. However, when I deployed to Vercel, everything was not working. No matter how many times I accessed the blog, the view count didn't increment, but the database did update. After a brief googling, I realize I know nothing about Next.js again. In development, getStaticProps will be called on every request. In production, getStaticProps always run during next build only. Therefore, The view count didn't update.
+
+After an hour's struggle in SSG, I had a question in my mind. Will there be a solution that keeps the rerender speed with SSG but updates the view count once someone visits the blog? From my existing knowledge, I can use useEffect with an empty dependency array and fetch the data when the page mounts every time. However, I'm not too fond of the space or animation handling when loading data. Then, I asked my friend, who is experienced in Next.js. He sent me a link to the Next.js official docs, which discuss Incremental Static Regeneration(ISR). ISR is a perfect answer to the question! It allows Incremental Static Regeneration per page without rebuilding the entire app.
+
+I found the key to step three. When I opened the door with this key, I found another bug. I followed some guides on youtube and added revalidate inside the getStaticProps function on every page with the view count feature. The weird happened, and some dynamic routing pages were not working. OMFG! This feature took me more than a week. I thought I was almost done, and there was extra trouble coming in.
+
+![community quick response](/static/images/blogs/a-journey-of-view-count-feature/community-quick-response.png)
+
+<div class="text-neutral-500 w-[100%] text-center">Quick response in Next.js discussion</div>
+
+I'm thankful those troubles make me learn more about reading logs in deployment and build time. Also, It pushed me to ask a question to the community, which surprised me since the Next.js community has a quick response to my inquiry within two hours. I love the open-source community, which makes web development more accessible and brilliant.
+
+Now, the view count feature is finally here. As a user, it may be an easy and tiny number to display on the page. For me, it is a beautiful journey to feel the power of Next.js and its community. By the way, I would like to try the on-demand ISR in the future. For the next task, I will work on giscus.
+
+Keep building!!! 🔧
